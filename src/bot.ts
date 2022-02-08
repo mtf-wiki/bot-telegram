@@ -9,7 +9,7 @@ const CHAT_ID_LIST = [
 bot.use(
   (context, next) => {
     // limit this bot only CHAT_ID_LIST available
-    const chatId = context.message?.chat.id ?? Number.NaN
+    const chatId = context.chat?.id ?? Number.NaN
     if (CHAT_ID_LIST.includes(chatId)) return next()
     return context.leaveChat()
   },
