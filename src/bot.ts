@@ -13,12 +13,13 @@ bot.use(
     if (CHAT_ID_LIST.includes(chatId)) return next()
     return context.leaveChat()
   },
-  (context) => {
+  async (context) => {
     // auto-ban channel message sender
     const { message } = context
     const chatType = message?.chat.type ?? ''
     if (!['group', 'supergroup'].includes(chatType)) return
     if (message?.sender_chat?.type !== 'channel') return
-    return context.banChatSenderChat(message.sender_chat.id)
+    await context.deleteMessage(message.message_id)
+    await context.banChatSenderChat(message.sender_chat.id)
   },
 )
