@@ -8,13 +8,13 @@ const CHAT_ID_LIST = [
 
 bot.use(
   (context, next) => {
-    // limit this bot only CHAT_ID_LIST avaiable
+    // limit this bot only CHAT_ID_LIST available
     const chatId = context.message?.chat.id ?? Number.NaN
     if (CHAT_ID_LIST.includes(chatId)) return next()
     return context.leaveChat()
   },
   async (context) => {
-    // auto-ban channel message sender
+    // auto-clean channel message sender
     const { message } = context
     const chatType = message?.chat.type ?? ''
     if (!['group', 'supergroup'].includes(chatType)) return
