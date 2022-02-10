@@ -5,7 +5,15 @@ import { User } from 'telegraf/typings/core/types/typegram'
 export const onCallAdmin = Composer.mention('admin', async (context) => {
   const members = await context.getChatAdministrators()
   const mentions = members
-    .filter(({ user }) => !(user.is_bot || user.username?.startsWith('SCP_079')))
+    .filter(({ user }) => {
+      // ignore General Bot
+      if (user.is_bot) return false
+      // ignore `Deleted Account`
+      if (user.first_name === '') return false
+      // ignore SCP-079 series bot
+      if (user.username?.startsWith('SCP_079')) return false
+      return true
+    })
     .map(({ user }) => `<a href="tg://user?id=${user.id}">${getDisplayName(user)}</a>`)
     .join('\n')
   await context.reply(mentions, { parse_mode: 'HTML' })
